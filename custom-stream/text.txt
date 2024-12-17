@@ -1,0 +1,1 @@
+Written through the custom writable stream. The last write into the file.
