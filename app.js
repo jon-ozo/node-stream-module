@@ -39,8 +39,8 @@ const path = require('path');
 // 	});
 // })();
 
-// usin streams: this is way faster than just writing data
-// directly but isn't memory efficient
+// using streams: this is way faster and more memory efficient cos
+// data is moved in chunks and not as a whole
 (async () => {
 	console.time('Streaming...');
 
@@ -51,10 +51,10 @@ const path = require('path');
 
 	let i = 0;
 	const writeToBuffer = () => {
-		while (i < 1000000) {
+		while (i < 500000000) {
 			const buff = Buffer.from(` ${i} `, 'utf-8');
 
-			if (i == 999999) {
+			if (i == 499999999) {
 				return stream.end(buff);
 			}
 
