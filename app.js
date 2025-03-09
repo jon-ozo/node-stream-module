@@ -1,5 +1,6 @@
-const fs = require('node:fs/promises');
-// const fs = require('node:fs');
+// const fs = require('node:fs/promises');
+const fs = require('node:fs');
+const { finished } = require('node:stream/promises');
 const path = require('path');
 
 // using promises: manages resources but executes slowly
@@ -41,39 +42,39 @@ const path = require('path');
 
 // using streams: this is way faster and more memory efficient cos
 // data is moved in chunks and not as a whole
-(async () => {
-	console.time('Streaming...');
+// (async () => {
+// 	console.time('Streaming...');
 
-	const fileHandle = await fs.open(path.join(__dirname, 'notes.txt'), 'w');
-	const stream = fileHandle.createWriteStream();
+// 	const fileHandle = await fs.open(path.join(__dirname, 'notes.txt'), 'w');
+// 	const stream = fileHandle.createWriteStream();
 
-	console.log(stream.writableHighWaterMark);
+// 	console.log(stream.writableHighWaterMark);
 
-	let i = 0;
-	const writeToBuffer = () => {
-		while (i < 500000000) {
-			const buff = Buffer.from(` ${i} `, 'utf-8');
+// 	let i = 0;
+// 	const writeToBuffer = () => {
+// 		while (i < 500000000) {
+// 			const buff = Buffer.from(` ${i} `, 'utf-8');
 
-			if (i == 499999999) {
-				return stream.end(buff);
-			}
+// 			if (i == 499999999) {
+// 				return stream.end(buff);
+// 			}
 
-			i++;
+// 			i++;
 
-			if (!stream.write(buff)) break;
-		}
-	};
-	writeToBuffer();
+// 			if (!stream.write(buff)) break;
+// 		}
+// 	};
+// 	writeToBuffer();
 
-	stream.on('drain', () => {
-		writeToBuffer();
-	});
+// 	stream.on('drain', () => {
+// 		writeToBuffer();
+// 	});
 
-	stream.on('finish', () => {
-		fileHandle.close();
-		console.timeEnd('Streaming...');
-	});
-})();
+// 	stream.on('finish', () => {
+// 		fileHandle.close();
+// 		console.timeEnd('Streaming...');
+// 	});
+// })();
 
 // const file = fs.createWriteStream(path.join(__dirname, 'text_file.txt'), {
 // 	flag: 'a',
@@ -87,3 +88,18 @@ const path = require('path');
 // 		if (err) throw err;
 // 	});
 // }
+
+// --------------------------------------------------
+// --------------------------------------------------
+
+// const rs = fs.createReadStream('notes.txt');
+
+// async function run() {
+// 	console.time('time');
+// 	await finished(rs);
+// 	console.timeEnd('time');
+// 	console.log('Stream is done reading.');
+// }
+
+// run().catch(console.error);
+// rs.resume(); // Drain the stream.
